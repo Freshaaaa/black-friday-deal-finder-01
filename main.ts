@@ -52,8 +52,8 @@ console.log(`screenshots/ -> ${join(out, 'screenshots')}`);
 const dossier = buildDossier(out, {
   text_max_bytes: 163840,
   screenshots: { max: 4, max_bytes: 262144 },
-  game_max_files: 993,
-  game_max_bytes: 50331648,
+  app_max_files: 993,
+  app_max_bytes: 16777216,
 });
 writeFileSync(join(out, 'dossier.json'), dossier);
 console.log(`dossier.json -> ${join(out, 'dossier.json')} (${dossier.length} bytes)`);
