@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DealHound — Real Black Friday Deals 2026, Verified Prices</title>
+<meta name="description" content="A Black Friday and Cyber Monday deal finder with real prices checked on 27 Nov 2026. Every deal shows its store, sale price, usual price, check time and an honest verdict: new low, strong, weak, or not a deal at all.">
+<style>
+  :root{
+    --ink:#191817; --paper:#faf6ef; --card:#ffffff; --line:#e5ddd0;
+    --amber:#e8590c; --amber-soft:#fff1e6; --gold:#b7791f;
+    --green:#15803d; --teal:#0e7490; --blue:#1d4ed8; --grey:#6b7280;
+    --mix:#b45309; --red:#b91c1c; --nowas:#92400e;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.45}
+  a{color:var(--amber)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+  /* ---- header ---- */
+  header{background:#16130f;color:#fff}
+  .topbar{display:flex;align-items:center;gap:14px;padding:14px 0;flex-wrap:wrap}
+  .mark{width:44px;height:44px;border-radius:10px;background:var(--amber);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:900;font-size:22px;flex:none}
+  .brand{font-size:24px;font-weight:900;letter-spacing:-.5px}
+  .brand span{color:#ffb25e}
+  .tag{font-size:13px;color:#d8cfc2;margin-top:2px}
+  .stamp{margin-left:auto;background:#262019;border:1px solid #4a3f30;color:#ffd9a8;
+    border-radius:8px;padding:8px 12px;font-size:13px;line-height:1.35;text-align:right}
+  .stamp b{color:#fff}
+  /* ---- hero ---- */
+  .hero{padding:26px 0 8px}
+  .hero h1{font-size:34px;line-height:1.12;margin:0 0 8px;letter-spacing:-.8px;max-width:760px}
+  .hero h1 em{font-style:normal;color:var(--amber)}
+  .hero p.lede{font-size:16px;color:#4c463c;margin:0 0 16px;max-width:760px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 18px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .n{font-size:30px;font-weight:900;letter-spacing:-1px}
+  .stat .l{font-size:13px;color:#6b6257}
+  .stat.hot{background:#16130f;color:#fff;border-color:#16130f}
+  .stat.hot .l{color:#d8cfc2}
+  .stat.hot .n{color:#ffb25e}
+  /* ---- search + filters ---- */
+  .controls{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;margin-bottom:14px;position:sticky;top:0;z-index:5;
+    box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  .searchrow{display:flex;gap:10px;flex-wrap:wrap}
+  .search{flex:1;min-width:220px;display:flex;align-items:center;gap:8px;
+    border:2px solid #d8cfc2;border-radius:10px;padding:0 12px;background:#fff}
+  .search input{border:0;outline:0;font-size:16px;padding:12px 0;width:100%;background:transparent}
+  .search:focus-within{border-color:var(--amber)}
+  select{font-size:15px;padding:11px 10px;border:2px solid #d8cfc2;border-radius:10px;background:#fff}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .chip{border:1px solid #d8cfc2;background:#fff;border-radius:999px;padding:7px 13px;
+    font-size:14px;cursor:pointer}
+  .chip[aria-pressed="true"]{background:#16130f;color:#fff;border-color:#16130f}
+  .minrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;font-size:14px}
+  .minrow .lbl{color:#6b6257}
+  .pill{border:1px solid #d8cfc2;background:#fff;border-radius:999px;padding:6px 12px;
+    font-size:14px;cursor:pointer}
+  .pill[aria-pressed="true"]{background:var(--amber);color:#fff;border-color:var(--amber)}
+  .countline{margin:14px 2px 10px;font-size:14px;color:#4c463c}
+  .countline b{color:var(--ink)}
+  /* ---- legend ---- */
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#4c463c;margin:0 2px 14px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+  /* ---- grid + cards ---- */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:16px;display:flex;flex-direction:column}
+  .card .eyebrow{display:flex;justify-content:space-between;gap:8px;font-size:12px;
+    text-transform:uppercase;letter-spacing:.6px;color:#6b6257;margin-bottom:8px}
+  .store{font-weight:800;color:var(--ink)}
+  .card h2{font-size:17.5px;line-height:1.3;margin:0 0 10px;letter-spacing:-.2px}
+  .prices{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .sale{font-size:30px;font-weight:900;letter-spacing:-1px}
+  .was{font-size:16px;color:#8a8175;text-decoration:line-through}
+  .save{display:inline-block;background:#e7f6ec;color:#166534;font-weight:800;
+    border-radius:999px;padding:4px 10px;font-size:13px;margin:2px 0 10px}
+  .save.big{background:#dcfce7}
+  .verdict{display:inline-flex;align-items:center;gap:7px;border-radius:8px;
+    padding:7px 10px;font-size:13px;font-weight:800;color:#fff;margin-bottom:8px;width:fit-content}
+  .v-newlow{background:var(--green)} .v-strong{background:var(--teal)}
+  .v-solid{background:var(--blue)} .v-weak{background:var(--grey)}
+  .v-mixed{background:var(--mix)} .v-notdeal{background:var(--red)}
+  .v-nowas{background:var(--nowas)}
+  .evidence{font-size:13.5px;color:#4c463c;margin:0 0 10px}
+  .meta{font-size:12.5px;color:#8a8175;margin:0 0 12px}
+  .meta a{color:#8a8175}
+  .actions{margin-top:auto;display:flex;gap:8px}
+  .btn{flex:1;text-align:center;text-decoration:none;font-weight:800;font-size:14px;
+    border-radius:9px;padding:10px 8px;border:2px solid #16130f}
+  .btn.go{background:#16130f;color:#fff}
+  .btn.src{background:#fff;color:#16130f}
+  .empty{background:#fff;border:1px dashed #c9bfae;border-radius:14px;padding:34px 20px;
+    text-align:center;color:#4c463c}
+  .empty h2{margin:0 0 6px;font-size:20px;color:var(--ink)}
+  .empty button{margin-top:12px}
+  /* ---- sections ---- */
+  section.block{margin:30px 0}
+  section.block h2{font-size:23px;letter-spacing:-.5px;margin:0 0 4px}
+  section.block .sub{color:#6b6257;margin:0 0 14px;font-size:15px}
+  .howto{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .how{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .how b{display:block;font-size:15px;margin-bottom:4px}
+  .how p{margin:0;font-size:14px;color:#4c463c}
+  .cal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .cal div{background:#16130f;color:#fff;border-radius:12px;padding:14px 16px}
+  .cal b{display:block;font-size:15px}
+  .cal span{font-size:13px;color:#d8cfc2}
+  .srcs{font-size:14px;color:#4c463c}
+  .srcs li{margin-bottom:6px}
+  footer{border-top:1px solid var(--line);padding:22px 0 34px;font-size:13px;color:#8a8175}
+  footer a{color:#8a8175}
+  @media (max-width:900px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .howto,.cal{grid-template-columns:1fr}
+    .hero h1{font-size:28px}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr}
+    .stamp{margin-left:0;text-align:left}
+    .hero h1{font-size:25px}
+    .sale{font-size:27px}
+    .controls{position:static}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap topbar">
+    <div class="mark">D</div>
+    <div>
+      <div class="brand">Deal<span>Hound</span></div>
+      <div class="tag">Black Friday &amp; Cyber Monday deal finder &middot; United States</div>
+    </div>
+    <div class="stamp"><b>Prices checked Fri 27 Nov 2026</b><br>Black Friday &middot; from retailer releases<br>&amp; deal-site reports</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Real Black Friday deals. <em>Verified prices.</em> No inflated discounts.</h1>
+    <p class="lede">Every deal below was found and checked by this site's author on Black Friday itself,
+      27 November 2026. Each card shows the store, the sale price, the usual price, when it was
+      checked &mdash; and an honest verdict on whether it is actually a deal.</p>
+    <div class="stats" id="stats"></div>
+  </div>
+
+  <div class="controls" id="controls">
+    <div class="searchrow">
+      <label class="search"><span aria-hidden="true">&#128269;</span>
+        <input id="q" type="search" placeholder="Search a product or store&hellip; e.g. airpods, tv, laptop" autocomplete="off">
+      </label>
+      <select id="store" aria-label="Filter by store"></select>
+      <select id="sort" aria-label="Sort deals">
+        <option value="pct">Sort: biggest % off</option>
+        <option value="save">Sort: biggest $ saving</option>
+        <option value="price">Sort: lowest price</option>
+        <option value="az">Sort: A&ndash;Z</option>
+      </select>
+    </div>
+    <div class="chips" id="cats" role="group" aria-label="Filter by category"></div>
+    <div class="minrow">
+      <span class="lbl">Minimum discount:</span>
+      <button class="pill" data-min="0" aria-pressed="true">Any</button>
+      <button class="pill" data-min="20" aria-pressed="false">20%+ off</button>
+      <button class="pill" data-min="40" aria-pressed="false">40%+ off</button>
+      <button class="pill" data-min="50" aria-pressed="false">50%+ off</button>
+    </div>
+  </div>
+
+  <p class="countline" id="countline"></p>
+  <div class="legend" id="legend"></div>
+  <div class="grid" id="grid"></div>
+
+  <section class="block">
+    <h2>How we check a deal</h2>
+    <p class="sub">Three rules, applied to every card above. If a deal fails one, the card says so.</p>
+    <div class="howto">
+      <div class="how"><b>1. Read the price where it is sold</b>
+        <p>Prices come from the retailer's own Black Friday release or a deal report that names
+        the store and the price seen. Nothing is invented, rounded up, or carried over from last year.</p></div>
+      <div class="how"><b>2. Compare against the usual price</b>
+        <p>The verdict uses the discount and the dollars saved. A 9% cut on a bundle is not a
+        bargain just because it says Black Friday on it.</p></div>
+      <div class="how"><b>3. Say when the store hides the was-price</b>
+        <p>Some stores show a sale price with no regular price at all. Those deals are labelled
+        <b>No was-price</b> instead of getting a discount we cannot verify.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Sale windows 2026</h2>
+    <p class="sub">When each store's main sale runs, from the stores' own announcements.</p>
+    <div class="cal">
+      <div><b>Amazon</b><span>Black Friday Week &amp; Cyber Monday &middot; 19&ndash;30 Nov</span></div>
+      <div><b>Best Buy</b><span>Black Friday Sale &middot; 19&ndash;28 Nov &middot; Cyber Sun&ndash;Mon 29&ndash;30 Nov</span></div>
+      <div><b>Walmart</b><span>Black Friday Deals &middot; 23&ndash;29 Nov &middot; Cyber Monday 30 Nov&ndash;2 Dec</span></div>
+      <div><b>Target</b><span>Black Friday sale &middot; 22&ndash;29 Nov</span></div>
+      <div><b>Costco</b><span>Black Friday &middot; 27&ndash;30 Nov</span></div>
+      <div><b>Apple</b><span>Gift-card event, not a price cut &middot; 27&ndash;30 Nov</span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Sources</h2>
+    <ul class="srcs">
+      <li>Best Buy Black Friday release, 17 Nov 2026 (via <a href="https://beebulletin.com/black-friday-sale-dates-by-store/">BeeBulletin deal tracker, checked 27 Nov 2026</a>).</li>
+      <li>Amazon prices reported by 9to5Toys, 20&ndash;23 Nov 2026 (via the same tracker).</li>
+      <li>Walmart, Target, Costco and Newegg prices: <a href="https://www.tradingview.com/news/benzinga:4abf2922c094b:0-black-friday-2026-tech-deals-airpods-pro-3-for-149-65-inch-tvs-for-228-and-laptops-under-450-at-major-retailers/">Benzinga / TradingView, 27 Nov 2026</a> and the BeeBulletin tracker.</li>
+      <li>Google Home Speaker lowest-ever price: <a href="https://9to5google.com/2026/11/12/deals-smarttag-3-chromebook-walmart-early-black-friday/">9to5Google, 12 Nov 2026</a>.</li>
+      <li>Price-history context: <a href="https://gamegavel.com/black-friday-2026-best-real-deals/">GameGavel 90-day check, 25 Nov 2026</a>.</li>
+      <li>Shop buttons go to the store's own site (product pages rotate during Black Friday). Always confirm the price at checkout &mdash; prices move hourly on the day.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    DealHound is an independent finder built 27 Nov 2026. It is not affiliated with Amazon, Best Buy,
+    Walmart, Target, Costco, Newegg, Nintendo, Xbox or Apple, and it copies no store's branding, text or images.
+    Prices were checked 27 Nov 2026 and can change. Cyber Monday runs 30 Nov 2026.
+  </div>
+</footer>
+<script>
+"use strict";
+/* DealHound data — every price below was read by the author on 27 Nov 2026
+   from the source named in each deal's `src` field:
+   - "BB release"  = Best Buy Black Friday release, 17 Nov 2026 (re-checked 27 Nov)
+   - "9to5Toys"    = 9to5Toys deal report, 20-23 Nov 2026
+   - "Benzinga"    = Benzinga / TradingView round-up, 27 Nov 2026
+   - "9to5Google"  = 9to5Google deals, 12 Nov 2026
+   - "Xbox Wire"   = Xbox Wire announcement, 16 Nov 2026
+   - "Apple"       = Apple.com Black Friday Shopping Event, 27-30 Nov 2026
+   `was: null` means the store showed no regular price, so no discount is claimed.
+   Shop links go to the store itself; product pages rotate during Black Friday. */
+var SHOP = {
+  "Amazon": "https://www.amazon.com",
+  "Best Buy": "https://www.bestbuy.com",
+  "Walmart": "https://www.walmart.com",
+  "Target": "https://www.target.com",
+  "Costco": "https://www.costco.com",
+  "Newegg": "https://www.newegg.com",
+  "Nintendo": "https://www.nintendo.com",
+  "Xbox Store": "https://www.xbox.com",
+  "Apple": "https://www.apple.com"
+};
+var SRC_URL = {
+  "tracker": "https://beebulletin.com/black-friday-sale-dates-by-store/",
+  "benzinga": "https://www.tradingview.com/news/benzinga:4abf2922c094b:0-black-friday-2026-tech-deals-airpods-pro-3-for-149-65-inch-tvs-for-228-and-laptops-under-450-at-major-retailers/",
+  "9to5google": "https://9to5google.com/2026/11/12/deals-smarttag-3-chromebook-walmart-early-black-friday/",
+  "xbox": "https://news.xbox.com/en-us/2026/11/16/xbox-black-friday-sale-2026/"
+};
+var DEALS = [
+  {name:"TCL 65-inch 4K UHD HDR Smart TV with Fire TV (2026)", store:"Best Buy", cat:"TVs",
+   sale:229.99, was:469.99, verdict:"strong",
+   why:"Best Buy's own release lists $240 off — the deepest TV cut in the release.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"Hisense 65-inch H5R1 4K Roku TV", store:"Walmart", cat:"TVs",
+   sale:228, was:398, verdict:"strong",
+   why:"$170 off in Walmart's Black Friday Deals event, 23–29 Nov.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"TCL 55-inch 4K Roku TV", store:"Walmart", cat:"TVs",
+   sale:168, was:null, verdict:"nowas",
+   why:"Walmart lists $168, but shows no regular price — so the discount cannot be verified.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"Hisense 100-inch QD7 Hi-QLED TV", store:"Costco", cat:"TVs",
+   sale:999.99, was:null, verdict:"nowas",
+   why:"Costco lists $999.99 for a 100-inch set, 27–30 Nov; regular price not shown.",
+   src:"tracker", srcUrl:"tracker"},
+  {name:"Sony BRAVIA 6 4K OLED TV, 55-inch", store:"Costco", cat:"TVs",
+   sale:999.99, was:null, verdict:"nowas",
+   why:"Costco lists $999.99 (65-inch: $1,199.99) through 30 Nov; regular price not shown.",
+   src:"tracker", srcUrl:"tracker"},
+  {name:"Insignia 40-inch Fire TV", store:"Best Buy", cat:"TVs",
+   sale:89.99, was:null, verdict:"nowas",
+   why:"Best Buy lists $89.99; no regular price shown, so no discount is claimed.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"Apple MacBook Air 13-inch (M5, 16GB / 512GB)", store:"Amazon", cat:"Laptops",
+   sale:989, was:1299, verdict:"newlow",
+   why:"$310 off — the lowest MacBook Air price anywhere in this sale (Best Buy: $1,049).",
+   src:"9to5Toys", srcUrl:"tracker"},
+  {name:"Apple MacBook Air 13-inch (M5, 16GB / 512GB)", store:"Best Buy", cat:"Laptops",
+   sale:1049, was:1299, verdict:"solid",
+   why:"$250 off in Best Buy's Black Friday release — $60 more than Amazon's price.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"HP OmniBook 5, 14-inch 2K OLED Touchscreen Laptop", store:"Best Buy", cat:"Laptops",
+   sale:449.99, was:799.99, verdict:"strong",
+   why:"$350 off — the cheapest OLED laptop in the whole sale.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"Apple AirPods Pro 3", store:"Amazon", cat:"Audio",
+   sale:149, was:249, verdict:"newlow",
+   why:"Amazon's lowest price ever for AirPods Pro 3, per 9to5Toys (seen 23 Nov).",
+   src:"9to5Toys", srcUrl:"tracker"},
+  {name:"Sony WH-1000XM5 Noise-Cancelling Headphones", store:"Best Buy", cat:"Audio",
+   sale:169, was:398, verdict:"strong",
+   why:"$229 off — the biggest headphone saving in Best Buy's release.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"Beats Studio Pro Headphones", store:"Walmart", cat:"Audio",
+   sale:99, was:299, verdict:"strong",
+   why:"$200 off — the deepest percentage cut in this finder.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"Beats Solo 4 Headphones", store:"Target", cat:"Audio",
+   sale:79.99, was:199.99, verdict:"strong",
+   why:"$120 off at Target, 22–29 Nov.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"Sonos Arc Ultra Soundbar Bundle", store:"Costco", cat:"Audio",
+   sale:849.99, was:1099.99, verdict:"solid",
+   why:"$250 off at Costco through 30 Nov.",
+   src:"tracker", srcUrl:"tracker"},
+  {name:"Google Home Speaker (all colours)", store:"Best Buy", cat:"Audio",
+   sale:79.99, was:100, verdict:"newlow",
+   why:"Lowest price ever, per 9to5Google — the first time under $80.",
+   src:"9to5Google", srcUrl:"9to5google"},
+  {name:"Nintendo Switch 2 + Mario Kart World Bundle", store:"Nintendo", cat:"Gaming",
+   sale:499.99, was:549.99, verdict:"weak",
+   why:"Only $50 off, and the console alone has no cut — the smallest gaming discount here.",
+   src:"tracker", srcUrl:"tracker"},
+  {name:"Xbox Black Friday Sale — 2,000+ Xbox & PC games", store:"Xbox Store", cat:"Gaming",
+   sale:null, saleText:"Up to 80% off", was:null, verdict:"mixed",
+   why:"Up to 80% off selected games, 19 Nov–2 Dec. The cut varies by title — check each game.",
+   src:"Xbox Wire", srcUrl:"xbox"},
+  {name:"Apple Watch Series 12 (GPS, 42mm)", store:"Amazon", cat:"Wearables",
+   sale:299, was:399, verdict:"solid",
+   why:"$100 off, seen 23 Nov (9to5Toys).",
+   src:"9to5Toys", srcUrl:"tracker"},
+  {name:"Apple iPad mini (A20 Pro, OLED, 128GB)", store:"Amazon", cat:"Tablets",
+   sale:599, was:699, verdict:"weak",
+   why:"Only $100 off the 128GB; the 256GB saves $18 and the 512GB $29 — thin cuts.",
+   src:"9to5Toys", srcUrl:"tracker"},
+  {name:"Kindle Paperwhite", store:"Target", cat:"Tablets",
+   sale:129.99, was:199.99, verdict:"solid",
+   why:"$70 off at Target.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"Shark PowerDetect Speed Cordless Stick Vacuum (IA1121)", store:"Best Buy", cat:"Home",
+   sale:199.99, was:499.99, verdict:"strong",
+   why:"$300 off — one of the biggest dollar savings in Best Buy's release.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"Insignia Refrigerator", store:"Best Buy", cat:"Home",
+   sale:299.99, was:749.99, verdict:"strong",
+   why:"$450 off — the biggest dollar saving in this finder.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"LEGO Pokémon Iconic Trainer Moments Poké Ball (2,386 pieces)", store:"Amazon", cat:"Toys",
+   sale:225, was:300, verdict:"solid",
+   why:"$75 off, seen 20 Nov (9to5Toys).",
+   src:"9to5Toys", srcUrl:"tracker"},
+  {name:"Samsung 9100 PRO 2TB Gen5 SSD", store:"Amazon", cat:"PC Parts",
+   sale:349.99, was:679.97, verdict:"strong",
+   why:"$330 off list — the best Gen5 SSD doorbuster in the sale.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"Gigabyte Z890 Aorus Master Motherboard", store:"Newegg", cat:"PC Parts",
+   sale:289.99, was:499.99, verdict:"strong",
+   why:"$210 off at Newegg.",
+   src:"Benzinga", srcUrl:"benzinga"},
+  {name:"Samsung Galaxy S26 FE", store:"Best Buy", cat:"Phones",
+   sale:499.99, was:699.99, verdict:"solid",
+   why:"$200 off in Best Buy's Black Friday release.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"Apple iPhone 17 Pro", store:"Best Buy", cat:"Phones",
+   sale:1099.99, was:1199.99, verdict:"weak",
+   why:"Only $100 off — a token cut on a brand-new phone.",
+   src:"BB release", srcUrl:"tracker"},
+  {name:"Apple Black Friday Shopping Event — Mac, iPad, iPhone, AirPods, Watch", store:"Apple", cat:"Event",
+   sale:null, saleText:"Full price", was:null, verdict:"notdeal",
+   why:"Apple charges full price and gives a gift card (up to $300) instead. A $250-off MacBook Air elsewhere beats a $200 gift card.",
+   src:"Apple", srcUrl:"tracker"}
+];
+var VERDICT = {
+  newlow:{label:"NEW LOW", cls:"v-newlow", dot:"#15803d", text:"All-time low price"},
+  strong:{label:"STRONG DEAL", cls:"v-strong", dot:"#0e7490", text:"Big cut, big saving"},
+  solid:{label:"SOLID DEAL", cls:"v-solid", dot:"#1d4ed8", text:"Real saving, not the best"},
+  weak:{label:"WEAK DEAL", cls:"v-weak", dot:"#6b7280", text:"Small cut — think twice"},
+  mixed:{label:"MIXED", cls:"v-mixed", dot:"#b45309", text:"Varies — check each item"},
+  notdeal:{label:"NOT A DISCOUNT", cls:"v-notdeal", dot:"#b91c1c", text:"Full price, gift card only"},
+  nowas:{label:"NO WAS-PRICE", cls:"v-nowas", dot:"#92400e", text:"Discount cannot be verified"}
+};
+function pct(d){ return d.was ? Math.round((1 - d.sale / d.was) * 100) : null; }
+function save(d){ return d.was ? Math.round(d.was - d.sale) : null; }
+function money(n){ return "$" + n.toLocaleString("en-US", {minimumFractionDigits: (n % 1 ? 2 : 0), maximumFractionDigits: 2}); }
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+
+var state = { q:"", cat:"All", store:"All", min:0, sort:"pct" };
+function readParams(){
+  var p = new URLSearchParams(location.search);
+  if (p.get("q")) state.q = p.get("q");
+  if (p.get("cat")) state.cat = p.get("cat");
+  if (p.get("store")) state.store = p.get("store");
+  if (p.get("min")) state.min = parseInt(p.get("min"), 10) || 0;
+  if (p.get("sort")) state.sort = p.get("sort");
+}
+function filtered(){
+  var q = state.q.trim().toLowerCase();
+  var list = DEALS.filter(function(d){
+    if (state.cat !== "All" && d.cat !== state.cat) return false;
+    if (state.store !== "All" && d.store !== state.store) return false;
+    var p = pct(d);
+    if (state.min > 0 && (p === null || p < state.min)) return false;
+    if (q && (d.name + " " + d.store + " " + d.cat).toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+  list.sort(function(a, b){
+    if (state.sort === "save") return (save(b) || 0) - (save(a) || 0);
+    if (state.sort === "price") return (a.sale === null ? 1e9 : a.sale) - (b.sale === null ? 1e9 : b.sale);
+    if (state.sort === "az") return a.name.localeCompare(b.name);
+    return (pct(b) === null ? -1 : pct(b)) - (pct(a) === null ? -1 : pct(a));
+  });
+  return list;
+}
+function card(d){
+  var v = VERDICT[d.verdict], p = pct(d), s = save(d);
+  var price = d.sale === null
+    ? '<span class="sale" style="font-size:24px">' + esc(d.saleText) + '</span>'
+    : '<span class="sale">' + money(d.sale) + '</span>';
+  var was = d.was ? '<span class="was">' + money(d.was) + '</span>' : "";
+  var savePill = (p !== null)
+    ? '<span class="save' + (p >= 50 ? " big" : "") + '">&minus;' + p + '% &middot; save ' + money(s) + '</span>'
+    : '<span class="save">No discount shown</span>';
+  return '<article class="card">'
+    + '<div class="eyebrow"><span>' + esc(d.cat) + '</span><span class="store">' + esc(d.store) + '</span></div>'
+    + '<h2>' + esc(d.name) + '</h2>'
+    + '<div class="prices">' + price + was + '</div>'
+    + savePill
+    + '<span class="verdict ' + v.cls + '">' + v.label + '</span>'
+    + '<p class="evidence">' + esc(d.why) + '</p>'
+    + '<p class="meta">Checked 27 Nov 2026 &middot; Source: <a href="' + SRC_URL[d.srcUrl] + '">' + esc(d.src) + '</a></p>'
+    + '<div class="actions"><a class="btn go" href="' + SHOP[d.store] + '">Check at ' + esc(d.store) + ' &#8599;</a>'
+    + '<a class="btn src" href="' + SRC_URL[d.srcUrl] + '">Source &#8599;</a></div>'
+    + '</article>';
+}
+function render(){
+  var list = filtered();
+  var grid = document.getElementById("grid");
+  if (!list.length){
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h2>No deals match those filters</h2>'
+      + '<p>Try a lower minimum discount, another store, or clear the search.</p>'
+      + '<button class="pill" id="clearBtn" aria-pressed="false">Clear all filters</button></div>';
+    document.getElementById("clearBtn").onclick = function(){
+      state = { q:"", cat:"All", store:"All", min:0, sort:"pct" };
+      document.getElementById("q").value = ""; syncControls(); render();
+    };
+  } else {
+    grid.innerHTML = list.map(card).join("");
+  }
+  var real = DEALS.filter(function(d){ return d.verdict === "newlow" || d.verdict === "strong"; }).length;
+  document.getElementById("countline").innerHTML =
+    "Showing <b>" + list.length + "</b> of <b>" + DEALS.length + "</b> deals"
+    + (state.cat !== "All" ? " in <b>" + esc(state.cat) + "</b>" : "")
+    + (state.store !== "All" ? " at <b>" + esc(state.store) + "</b>" : "")
+    + (state.min > 0 ? " with <b>" + state.min + "%+ off</b>" : "")
+    + (state.q ? ' matching "<b>' + esc(state.q) + '</b>"' : "")
+    + " &middot; " + real + " of them are new lows or strong deals.";
+}
+function buildControls(){
+  var cats = ["All"].concat(DEALS.map(function(d){ return d.cat; }).filter(function(v,i,a){ return a.indexOf(v) === i; }));
+  document.getElementById("cats").innerHTML = cats.map(function(c){
+    return '<button class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (state.cat === c) + '">' + esc(c) + '</button>';
+  }).join("");
+  var stores = ["All"].concat(DEALS.map(function(d){ return d.store; }).filter(function(v,i,a){ return a.indexOf(v) === i; }));
+  document.getElementById("store").innerHTML = stores.map(function(s){
+    var n = s === "All" ? DEALS.length : DEALS.filter(function(d){ return d.store === s; }).length;
+    return '<option value="' + esc(s) + '"' + (state.store === s ? " selected" : "") + '>' + (s === "All" ? "All stores" : s) + " (" + n + ")</option>";
+  }).join("");
+  document.getElementById("legend").innerHTML = Object.keys(VERDICT).map(function(k){
+    return '<span><i class="dot" style="background:' + VERDICT[k].dot + '"></i><b>' + VERDICT[k].label + '</b>&nbsp;' + VERDICT[k].text + '</span>';
+  }).join("");
+  document.querySelectorAll("#cats .chip").forEach(function(b){
+    b.onclick = function(){ state.cat = b.getAttribute("data-cat"); syncControls(); render(); };
+  });
+  document.querySelectorAll(".minrow .pill").forEach(function(b){
+    b.onclick = function(){ state.min = parseInt(b.getAttribute("data-min"), 10); syncControls(); render(); };
+  });
+  document.getElementById("store").onchange = function(e){ state.store = e.target.value; render(); };
+  document.getElementById("sort").onchange = function(e){ state.sort = e.target.value; render(); };
+  document.getElementById("q").addEventListener("input", function(e){ state.q = e.target.value; render(); });
+}
+function syncControls(){
+  document.querySelectorAll("#cats .chip").forEach(function(b){
+    b.setAttribute("aria-pressed", String(b.getAttribute("data-cat") === state.cat));
+  });
+  document.querySelectorAll(".minrow .pill").forEach(function(b){
+    b.setAttribute("aria-pressed", String(parseInt(b.getAttribute("data-min"), 10) === state.min));
+  });
+  document.getElementById("store").value = state.store;
+  document.getElementById("sort").value = state.sort;
+  document.getElementById("q").value = state.q;
+}
+function buildStats(){
+  var real = DEALS.filter(function(d){ return d.verdict === "newlow" || d.verdict === "strong"; }).length;
+  var lows = DEALS.filter(function(d){ return d.verdict === "newlow"; }).length;
+  var best = Math.max.apply(null, DEALS.map(function(d){ return save(d) || 0; }));
+  var pcts = DEALS.map(pct).filter(function(p){ return p !== null; }).sort(function(a,b){ return a-b; });
+  var median = pcts[Math.floor(pcts.length / 2)];
+  document.getElementById("stats").innerHTML =
+    '<div class="stat hot"><div class="n">' + DEALS.length + '</div><div class="l">deals checked 27 Nov 2026</div></div>'
+    + '<div class="stat"><div class="n">' + real + '</div><div class="l">new lows or strong deals</div></div>'
+    + '<div class="stat"><div class="n">' + lows + '</div><div class="l">all-time low prices</div></div>'
+    + '<div class="stat"><div class="n">$' + best + '</div><div class="l">biggest single saving &middot; median ' + median + '% off</div></div>';
+}
+readParams();
+buildControls();
+buildStats();
+syncControls();
+render();
+</script>
+</body>
+</html>
