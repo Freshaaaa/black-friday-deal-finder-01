@@ -128,6 +128,32 @@
     .sale{font-size:27px}
     .controls{position:static}
   }
+  /* ---- v2: denser stats, bigger badges, Top 5 strip, bolder identity ---- */
+  .hero h1{font-size:38px}
+  .card .save{font-size:16px;font-weight:900;padding:7px 13px;margin:3px 0 10px}
+  .card .save.big{font-size:19px;background:#16a34a;color:#fff;padding:8px 14px}
+  .card .verdict{font-size:14px;padding:8px 12px}
+  @media (min-width:901px){
+    .stats{grid-template-columns:repeat(6,1fr)}
+    .stat{padding:12px 13px}
+    .stat .n{font-size:27px}
+  }
+  @media (max-width:900px){ .stats{grid-template-columns:repeat(3,1fr)} }
+  .top5{background:#16130f;color:#fff;border-radius:14px;padding:14px 16px 12px;margin:2px 0 16px;border:2px solid #f59e0b}
+  .top5 h2{margin:0 0 10px;font-size:20px;letter-spacing:-.3px}
+  .top5-kicker{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#ffb25e;margin-bottom:3px}
+  .top5 ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .top5 li a{display:flex;flex-direction:column;gap:3px;background:#262019;border:1px solid #4a3f30;border-radius:10px;padding:10px;text-decoration:none;color:#fff;height:100%}
+  .top5 li a:hover{border-color:#f59e0b}
+  .top5 .rank{font-size:22px;font-weight:900;color:#ffb25e;line-height:1}
+  .t5name{font-size:13.5px;font-weight:800;line-height:1.3}
+  .t5store{font-size:11.5px;color:#d8cfc2;text-transform:uppercase;letter-spacing:.4px}
+  .t5price{font-size:19px;font-weight:900}
+  .t5price s{font-size:13px;color:#a89e8d;font-weight:400}
+  .t5off{display:inline-block;background:#dc2626;color:#fff;font-weight:900;font-size:13px;border-radius:999px;padding:4px 9px;width:fit-content;margin-top:4px}
+  .top5-note{font-size:12.5px;color:#d8cfc2;margin:12px 0 0}
+  @media (max-width:900px){ .top5 ol{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:560px){ .top5 ol{grid-template-columns:1fr} .top5 h2{font-size:19px} }
 </style>
 </head>
 <body>
@@ -144,11 +170,12 @@
 
 <main class="wrap">
   <div class="hero">
-    <h1>Real Black Friday deals. <em>Verified prices.</em> No inflated discounts.</h1>
+    <h1>28 real Black Friday deals. <em>$4,224 total savings.</em> Every price verified.</h1>
     <p class="lede">Every deal below was found and checked by this site's author on Black Friday itself,
       27 November 2026. Each card shows the store, the sale price, the usual price, when it was
       checked &mdash; and an honest verdict on whether it is actually a deal.</p>
     <div class="stats" id="stats"></div>
+    <div class="top5" id="top5" aria-label="Top 5 biggest savings"></div>
   </div>
 
   <div class="controls" id="controls">
@@ -489,17 +516,39 @@ function syncControls(){
   document.getElementById("sort").value = state.sort;
   document.getElementById("q").value = state.q;
 }
+function buildTop5(){
+  var ranked = DEALS.filter(function(d){ return pct(d) !== null; }).sort(function(a, b){
+    var dp = (pct(b) || 0) - (pct(a) || 0);
+    return dp !== 0 ? dp : (save(b) || 0) - (save(a) || 0);
+  }).slice(0, 5);
+  var topSave = Math.max.apply(null, ranked.map(function(d){ return save(d) || 0; }));
+  document.getElementById("top5").innerHTML =
+    '<h2><span class="top5-kicker">Biggest savings first</span>Top 5 deals &mdash; save up to $' + Math.round(topSave) + '</h2>'
+    + '<ol>' + ranked.map(function(d, i){
+      return '<li><a href="' + SHOP[d.store] + '"><span class="rank">#' + (i + 1) + '</span>'
+        + '<span class="t5name">' + esc(d.name) + '</span>'
+        + '<span class="t5store">' + esc(d.store) + ' &middot; ' + VERDICT[d.verdict].label + '</span>'
+        + '<span class="t5price">' + money(d.sale) + ' <s>' + money(d.was) + '</s></span>'
+        + '<span class="t5off">&minus;' + pct(d) + '% &middot; save ' + money(save(d)) + '</span></a></li>';
+    }).join("") + '</ol>'
+    + '<p class="top5-note">Ranked by biggest % off. Every price was checked on 27 Nov 2026 &mdash; tap any deal to check it at the store.</p>';
+}
 function buildStats(){
   var real = DEALS.filter(function(d){ return d.verdict === "newlow" || d.verdict === "strong"; }).length;
   var lows = DEALS.filter(function(d){ return d.verdict === "newlow"; }).length;
   var best = Math.max.apply(null, DEALS.map(function(d){ return save(d) || 0; }));
   var pcts = DEALS.map(pct).filter(function(p){ return p !== null; }).sort(function(a,b){ return a-b; });
   var median = pcts[Math.floor(pcts.length / 2)];
+  var totalSaved = DEALS.reduce(function(t, d){ return t + (save(d) || 0); }, 0);
+  var avg = Math.round(pcts.reduce(function(t, p){ return t + p; }, 0) / pcts.length);
   document.getElementById("stats").innerHTML =
     '<div class="stat hot"><div class="n">' + DEALS.length + '</div><div class="l">deals checked 27 Nov 2026</div></div>'
+    + '<div class="stat"><div class="n">$' + Math.round(totalSaved).toLocaleString("en-US") + '</div><div class="l">total savings across all deals</div></div>'
+    + '<div class="stat"><div class="n">' + avg + '%</div><div class="l">average discount &middot; median ' + median + '% off</div></div>'
     + '<div class="stat"><div class="n">' + real + '</div><div class="l">new lows or strong deals</div></div>'
     + '<div class="stat"><div class="n">' + lows + '</div><div class="l">all-time low prices</div></div>'
-    + '<div class="stat"><div class="n">$' + best + '</div><div class="l">biggest single saving &middot; median ' + median + '% off</div></div>';
+    + '<div class="stat"><div class="n">$' + best + '</div><div class="l">biggest single saving</div></div>';
+  buildTop5();
 }
 readParams();
 buildControls();

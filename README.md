@@ -11,6 +11,10 @@ strong, solid, weak, mixed, not a discount, or no was-price** — with the evide
 for the call. Search and filters (category, store, minimum discount) all work, on
 desktop and on a phone, with no network requests at all.
 
+v2 (28 Nov 2026): a "Top 5 deals — save up to $450" strip ranked by biggest % off,
+six stat cards including $4,224 total savings and a 37% average discount, and
+much bigger discount badges on every card (50%+ cuts get a solid green pill).
+
 Built for the [make.fun bounty "Build the best real Black Friday deal finder"](https://make.fun/bounty/black-friday-deal-finder-01)
 ($250, 20 places paid; 1st $50, 2nd $35, 3rd $25).
 

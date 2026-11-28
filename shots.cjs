@@ -8,8 +8,8 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const SHOTS = [
   { file: 'screenshots/1-overview.png', query: '', w: 1280, h: 800 },
-  { file: 'screenshots/2-40off.png', query: '?min=40', w: 1280, h: 800 },
-  { file: 'screenshots/3-search-apple.png', query: '?q=apple', w: 1280, h: 800 },
+  { file: 'screenshots/2-40off.png', query: '?min=40', w: 1280, h: 800, scroll: '#controls' },
+  { file: 'screenshots/3-search-apple.png', query: '?q=apple', w: 1280, h: 800, scroll: '#controls' },
   { file: 'screenshots/4-phone.png', query: '', w: 390, h: 844 },
 ];
 
@@ -32,6 +32,9 @@ const SHOTS = [
     const count = await page.evaluate(() => (document.getElementById('countline') || {}).textContent || '');
     // Sanity: the render must show cards, never an empty grid on a preset view.
     if (cards === 0) errors.push('ZERO CARDS: ' + shot.file + ' ' + shot.query);
+    // Filter/search shots must show the filtered grid, not the (identical)
+    // hero above the fold: scroll the grid into view before capturing.
+    if (shot.scroll) { await page.evaluate((s) => document.querySelector(s).scrollIntoView(), shot.scroll); await sleep(300); }
     await page.screenshot({ path: path.resolve(__dirname, shot.file) });
     const bytes = fs.statSync(path.resolve(__dirname, shot.file)).size;
     console.log(shot.file + '  ' + bytes + ' bytes  cards=' + cards + '  | ' + count.trim().slice(0, 90) + (bytes > 262144 ? '  OVER 256 KiB!' : ''));
